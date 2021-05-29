@@ -5,8 +5,6 @@ const authenticate = require('../authenticate');
 
 const router = express.Router();
 
-
-
 /* GET users listing. */
 router.get('/', function(req, res, next) {
     res.send('respond with a resource');
@@ -64,5 +62,20 @@ router.get('/logout', (req, res, next) => {
         return next(err);
     }
 });
+
+router.get('/users', (req, res, next) => {
+    if (req.user.admin) {
+        Users.find()
+        .then(users => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(users);
+        })
+    } else {
+        const err = newError('You are not authorized!');
+        err.status = 403;
+        return next(err);
+    }
+})
 
 module.exports = router;

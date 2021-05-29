@@ -11,7 +11,7 @@ exports.local = passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-exports.getToken = function(user) {
+exports.getToken = user => {
     return jwt.sign(user, config.secretKey, {expiresIn: 3600});
 };
 
@@ -37,4 +37,12 @@ exports.jwtPassport = passport.use(
     )
 );
 
-exports.verifyUser = passport.authenticate('jwt', {session: false});
+exports.verifyUser = passport.authenticate('jwt', {session: false}); //verify incoming request is coming from verified user
+
+exports.verifyAdmin = function(req, res, next) {
+    if (req.user.admin) {
+        return next();
+    }
+        res.status = 403;
+        throw new Error('You are not authorized to perform this operation!');
+};
