@@ -3,7 +3,7 @@ const Promotion = require('../models/promotion');
 
 const promotionRouter = express.Router();
 
-Promotion.route('/')
+promotionRouter.route('/')
 .get((req, res, next) => {
     Promotion.find()
     .then(promotions => {
@@ -37,7 +37,7 @@ Promotion.route('/')
     .catch(err => next(err));
 });
 
-Promotion.route('/:promotionId')
+promotionRouter.route('/:promotionId')
 .get((req, res, next) => {
     Promotion.findById(req.params.promotionId)
     .then(promotion => {
